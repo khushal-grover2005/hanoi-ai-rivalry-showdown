@@ -75,7 +75,7 @@ const CompetitionControls: React.FC<CompetitionControlsProps> = ({
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {[2, 3, 4, 5, 6].map(n => (
+                {[2, 3, 4, 5, 6, 7, 8].map(n => (
                   <SelectItem key={n} value={n.toString()}>
                     {n} {n === 1 ? 'disk' : 'disks'}
                   </SelectItem>
@@ -89,7 +89,7 @@ const CompetitionControls: React.FC<CompetitionControlsProps> = ({
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="max-w-xs">
-                    More disks make the puzzle more complex. Beyond 6 disks, some algorithms may run very slowly.
+                    More disks make the puzzle more complex. Beyond 8 disks, some algorithms may run very slowly.
                   </p>
                 </TooltipContent>
               </Tooltip>

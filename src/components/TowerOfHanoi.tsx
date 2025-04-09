@@ -86,7 +86,7 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
 
   const maxDiskWidth = 100; // Width of the largest disk in pixels
   const diskHeight = 20; // Height of each disk in pixels
-  const maxDisks = Math.max(...initialState.map(rod => rod.length));
+  const maxDisks = Math.max(...initialState.map(rod => rod.length), 8); // Ensuring we can handle at least 8 disks
 
   return (
     <div className={cn(
@@ -102,7 +102,7 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
         </span>
       </div>
       
-      <div className="flex justify-center items-end space-x-12 h-[200px] relative">
+      <div className="flex justify-center items-end space-x-12 h-[250px] relative">
         {rods.map((rod, rodIndex) => (
           <div 
             key={rodIndex} 
@@ -112,10 +112,10 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
             )}
           >
             {/* Base of the rod */}
-            <div className="h-2 w-32 bg-gray-600 rounded-sm"></div>
+            <div className="h-2 w-36 bg-gray-600 rounded-sm"></div>
             
             {/* Rod */}
-            <div className="h-[180px] w-2 bg-gray-600 absolute bottom-2 rounded-t-sm"></div>
+            <div className="h-[230px] w-2 bg-gray-600 absolute bottom-2 rounded-t-sm"></div>
             
             {/* Disks */}
             <div className="flex flex-col-reverse items-center z-10">
@@ -124,8 +124,25 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
                 const widthPercent = (diskSize / maxDisks) * 100;
                 const width = (widthPercent / 100) * maxDiskWidth;
                 
+                // Determine if this is the largest disk (disk 1 is actually the largest)
+                const isLargestDisk = diskSize === maxDisks;
+                
                 // Color based on disk size (gradient from light to dark)
-                const colorIntensity = Math.round(40 + (diskSize / maxDisks) * 60);
+                // For the largest disk, use white with a border
+                let backgroundColor;
+                let borderStyle = '';
+                let textColor = 'text-white';
+                
+                if (isLargestDisk) {
+                  backgroundColor = 'white';
+                  borderStyle = 'border-2 border-gray-400';
+                  textColor = 'text-gray-800';
+                } else {
+                  const colorIntensity = Math.round(40 + (diskSize / maxDisks) * 60);
+                  backgroundColor = variant === 'algo1' 
+                    ? `hsl(221, 83%, ${colorIntensity}%)` 
+                    : `hsl(329, 100%, ${colorIntensity}%)`;
+                }
                 
                 return (
                   <div
@@ -133,20 +150,16 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
                     className={cn(
                       "rounded-md flex justify-center items-center transition-all duration-200",
                       isMovingDisk && "disk-moving",
-                      variant === 'algo1' 
-                        ? `bg-blue-${colorIntensity}` 
-                        : `bg-pink-${colorIntensity}`
+                      borderStyle
                     )}
                     style={{
                       width: `${width}px`,
                       height: `${diskHeight}px`,
-                      backgroundColor: variant === 'algo1' 
-                        ? `hsl(221, 83%, ${colorIntensity}%)` 
-                        : `hsl(329, 100%, ${colorIntensity}%)`,
+                      backgroundColor: backgroundColor,
                       transition: 'width 0.3s ease-in-out'
                     }}
                   >
-                    <span className="text-xs text-white font-bold">
+                    <span className={cn("text-xs font-bold", textColor)}>
                       {diskSize}
                     </span>
                   </div>
