@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Tower of hanoi: AI vs AI showdown
 
 ## Project info
 
