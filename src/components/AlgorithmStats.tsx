@@ -59,9 +59,6 @@ const AlgorithmStats: React.FC<AlgorithmStatsProps> = ({
                 variant === 'algo1' ? "bg-blue-100" : "bg-pink-100",
                 variant === 'algo1' ? "text-blue-500" : "text-pink-500"
               )}
-              indicatorClassName={
-                variant === 'algo1' ? "bg-blue-500" : "bg-pink-500"
-              }
             />
           </div>
           
@@ -76,9 +73,6 @@ const AlgorithmStats: React.FC<AlgorithmStatsProps> = ({
                 variant === 'algo1' ? "bg-blue-100" : "bg-pink-100",
                 variant === 'algo1' ? "text-blue-500" : "text-pink-500"
               )}
-              indicatorClassName={
-                variant === 'algo1' ? "bg-blue-500" : "bg-pink-500"
-              }
             />
           </div>
         </div>

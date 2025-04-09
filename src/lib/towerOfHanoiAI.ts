@@ -1,4 +1,3 @@
-
 // This file contains the AI logic for the Tower of Hanoi
 import { Move } from "@/components/TowerOfHanoi";
 
@@ -35,6 +34,7 @@ export class TowerOfHanoiAI {
     this.goalState = {
       rods: [[], [], [...Array(numDisks).keys()].map(i => numDisks - i)],
       moves: 0,
+      nodesExplored: 0
     };
   }
 
@@ -49,6 +49,7 @@ export class TowerOfHanoiAI {
     this.goalState = {
       rods: [[], [], [...Array(numDisks).keys()].map(i => numDisks - i)],
       moves: 0,
+      nodesExplored: 0
     };
   }
 
