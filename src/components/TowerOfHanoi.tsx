@@ -38,6 +38,7 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
   const [lastMovedDisk, setLastMovedDisk] = useState<number | null>(null);
   const [movingFrom, setMovingFrom] = useState<number | null>(null);
   const [movingTo, setMovingTo] = useState<number | null>(null);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   useEffect(() => {
     // Reset to initial state
@@ -48,6 +49,9 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
         { disks: [...initialState[2]] }
       ]);
       setLastMovedDisk(null);
+      setMovingFrom(null);
+      setMovingTo(null);
+      setIsAnimating(false);
       return;
     }
 
@@ -71,6 +75,7 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
     setMovingFrom(fromRod);
     setMovingTo(toRod);
     setLastMovedDisk(diskToMove);
+    setIsAnimating(true);
     
     setRods(newRods);
     
@@ -79,7 +84,8 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
       setMovingFrom(null);
       setMovingTo(null);
       setLastMovedDisk(null);
-    }, 600);
+      setIsAnimating(false);
+    }, 800); // Match animation duration
     
     return () => clearTimeout(timer);
   }, [currentMove, initialState, moves]);
@@ -108,7 +114,7 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
             key={rodIndex} 
             className={cn(
               "flex flex-col-reverse items-center relative",
-              (rodIndex === movingFrom || rodIndex === movingTo) && "rod-pulse"
+              (rodIndex === movingFrom || rodIndex === movingTo) && !isAnimating && "rod-pulse"
             )}
           >
             {/* Base of the rod */}
