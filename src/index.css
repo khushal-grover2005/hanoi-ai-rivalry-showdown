@@ -87,31 +87,23 @@
 
 @keyframes diskMove {
   0% {
-    transform: translate(var(--disk-start-x, 0px), 0) rotate(0deg);
+    transform: translate(var(--disk-start-x, 0px), 0);
     opacity: 0.9;
   }
-  20% {
-    transform: translate(calc(var(--disk-start-x, 0px) - 2px), -80px) rotate(-1deg);
-    opacity: 0.95;
-  }
   50% {
-    transform: translate(calc(var(--disk-start-x, 0px) + (var(--disk-end-x, 0px) - var(--disk-start-x, 0px)) * 0.5), -120px) rotate(0deg);
+    transform: translate(calc(var(--disk-start-x, 0px) + (var(--disk-end-x, 0px) - var(--disk-start-x, 0px)) * 0.5), -140px);
     opacity: 1;
-    scale: 1.05;
-  }
-  80% {
-    transform: translate(calc(var(--disk-end-x, 0px) + 2px), -80px) rotate(1deg);
-    opacity: 0.95;
+    scale: 1.03;
   }
   100% {
-    transform: translate(var(--disk-end-x, 0px), 0) rotate(0deg);
+    transform: translate(var(--disk-end-x, 0px), 0);
     opacity: 1;
     scale: 1;
   }
 }
 
 .disk-moving {
-  animation: diskMove 0.8s ease-in-out;
+  animation: diskMove 0.8s cubic-bezier(0.45, 0, 0.55, 1);
 }
 
 @keyframes rodPulse {
