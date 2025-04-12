@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -91,9 +90,9 @@
     opacity: 0.9;
   }
   50% {
-    transform: translate(calc(var(--disk-start-x, 0px) + (var(--disk-end-x, 0px) - var(--disk-start-x, 0px)) * 0.5), -140px);
+    transform: translate(calc(var(--disk-start-x, 0px) + (var(--disk-end-x, 0px) - var(--disk-start-x, 0px)) * 0.5), -80px);
     opacity: 1;
-    scale: 1.03;
+    scale: 1.02;
   }
   100% {
     transform: translate(var(--disk-end-x, 0px), 0);
@@ -103,7 +102,7 @@
 }
 
 .disk-moving {
-  animation: diskMove 0.8s cubic-bezier(0.45, 0, 0.55, 1);
+  animation: diskMove 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 @keyframes rodPulse {
