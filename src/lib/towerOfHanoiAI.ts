@@ -1,4 +1,3 @@
-
 // This file contains the AI logic for the Tower of Hanoi
 import { Move } from "@/components/TowerOfHanoi";
 
@@ -295,10 +294,20 @@ export class TowerOfHanoiAI {
     currentState.path = [];
     
     const heuristicFn = this.getHeuristicFunction();
-    let currentHeuristic = heuristicFn(currentState);
     let nodesExplored = 0;
+    let stuckCounter = 0;
+    const maxStuck = 10; // Allow some sideways moves to escape local optima
+    
+    // For weighted position heuristic, we maximize the score instead of minimizing
+    const isMaximizingHeuristic = this.heuristicType === '3' || this.heuristicType === '2';
+    let currentHeuristic = heuristicFn(currentState);
+    
+    // Maximum number of iterations to prevent infinite loops
+    const maxIterations = 1000;
+    let iterations = 0;
 
-    while (true) {
+    while (iterations < maxIterations) {
+      iterations++;
       nodesExplored++;
       
       if (this.isGoalState(currentState)) {
@@ -321,17 +330,58 @@ export class TowerOfHanoiAI {
         return { moves: -1, nodesExplored, movePath: [], success: false };
       }
 
-      // Sort by heuristic and take the best
-      neighbors.sort((a, b) => a[0] - b[0]);
+      // Sort neighbors based on heuristic type:
+      // - For minimizing heuristics (type 1): Best neighbor has lowest value
+      // - For maximizing heuristics (types 2, 3): Best neighbor has highest value
+      neighbors.sort((a, b) => isMaximizingHeuristic ? b[0] - a[0] : a[0] - b[0]);
       const [bestHeuristic, bestNeighbor] = neighbors[0];
 
-      if (bestHeuristic >= currentHeuristic) {
-        return { moves: -1, nodesExplored, movePath: currentState.path || [], success: false };
+      // Check if we're improving:
+      // - For minimizing heuristics: improvement means lower value
+      // - For maximizing heuristics: improvement means higher value
+      const isImprovement = isMaximizingHeuristic 
+        ? bestHeuristic > currentHeuristic
+        : bestHeuristic < currentHeuristic;
+      
+      // When not improving, we allow some sideways moves (same heuristic value)
+      // to help escape local optima
+      const isSideways = bestHeuristic === currentHeuristic;
+      
+      if (isImprovement) {
+        currentState = bestNeighbor;
+        currentHeuristic = bestHeuristic;
+        stuckCounter = 0; // Reset stuck counter on improvement
+      } else if (isSideways && stuckCounter < maxStuck) {
+        currentState = bestNeighbor;
+        stuckCounter++; // Count sideways moves
+      } else {
+        // If we can't find an improving move after max sideways moves,
+        // we'll try random restart as a last resort
+        if (iterations > maxIterations / 2) {
+          // Try a random move from available neighbors
+          const randomIdx = Math.floor(Math.random() * neighbors.length);
+          currentState = neighbors[randomIdx][1];
+          currentHeuristic = heuristicFn(currentState);
+          stuckCounter = 0;
+        } else {
+          // Return the best solution found so far
+          return { 
+            moves: currentState.moves, 
+            nodesExplored, 
+            movePath: currentState.path || [], 
+            success: this.isGoalState(currentState) 
+          };
+        }
       }
-
-      currentState = bestNeighbor;
-      currentHeuristic = bestHeuristic;
     }
+
+    // If we exit due to max iterations, return the current state
+    return { 
+      moves: currentState.moves, 
+      nodesExplored, 
+      movePath: currentState.path || [], 
+      success: this.isGoalState(currentState) 
+    };
   }
 
   runAlgorithm(algorithm: '1' | '2' | '3'): AlgorithmResult {
