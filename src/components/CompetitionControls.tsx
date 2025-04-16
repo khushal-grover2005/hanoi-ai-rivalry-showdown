@@ -24,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import { HeuristicType } from '@/lib/towerOfHanoiAI';
 
 interface CompetitionControlsProps {
   numDisks: number;
@@ -32,6 +33,10 @@ interface CompetitionControlsProps {
   algo2: string;
   onAlgo1Change: (value: string) => void;
   onAlgo2Change: (value: string) => void;
+  heuristic1: HeuristicType;
+  heuristic2: HeuristicType;
+  onHeuristic1Change: (value: HeuristicType) => void;
+  onHeuristic2Change: (value: HeuristicType) => void;
   isPlaying: boolean;
   onPlay: () => void;
   onPause: () => void;
@@ -50,6 +55,10 @@ const CompetitionControls: React.FC<CompetitionControlsProps> = ({
   algo2,
   onAlgo1Change,
   onAlgo2Change,
+  heuristic1,
+  heuristic2,
+  onHeuristic1Change,
+  onHeuristic2Change,
   isPlaying,
   onPlay,
   onPause,
@@ -99,38 +108,72 @@ const CompetitionControls: React.FC<CompetitionControlsProps> = ({
         
         <div className="space-y-2 flex-1">
           <div className="text-sm font-medium">Algorithm 1 (Blue)</div>
-          <Select 
-            value={algo1} 
-            onValueChange={onAlgo1Change}
-            disabled={competitionActive}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select algorithm" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">Best-First Search</SelectItem>
-              <SelectItem value="2">A* Algorithm</SelectItem>
-              <SelectItem value="3">Hill Climbing</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-2">
+            <Select 
+              value={algo1} 
+              onValueChange={onAlgo1Change}
+              disabled={competitionActive}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select algorithm" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Best-First Search</SelectItem>
+                <SelectItem value="2">A* Algorithm</SelectItem>
+                <SelectItem value="3">Hill Climbing</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select
+              value={heuristic1}
+              onValueChange={(value) => onHeuristic1Change(value as HeuristicType)}
+              disabled={competitionActive}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select heuristic" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Default (Distance-Based)</SelectItem>
+                <SelectItem value="2">Correct Peg (±1)</SelectItem>
+                <SelectItem value="3">Weighted Position (±n)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         
         <div className="space-y-2 flex-1">
           <div className="text-sm font-medium">Algorithm 2 (Pink)</div>
-          <Select 
-            value={algo2} 
-            onValueChange={onAlgo2Change}
-            disabled={competitionActive}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select algorithm" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">Best-First Search</SelectItem>
-              <SelectItem value="2">A* Algorithm</SelectItem>
-              <SelectItem value="3">Hill Climbing</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-col gap-2">
+            <Select 
+              value={algo2} 
+              onValueChange={onAlgo2Change}
+              disabled={competitionActive}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select algorithm" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Best-First Search</SelectItem>
+                <SelectItem value="2">A* Algorithm</SelectItem>
+                <SelectItem value="3">Hill Climbing</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select
+              value={heuristic2}
+              onValueChange={(value) => onHeuristic2Change(value as HeuristicType)}
+              disabled={competitionActive}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select heuristic" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Default (Distance-Based)</SelectItem>
+                <SelectItem value="2">Correct Peg (±1)</SelectItem>
+                <SelectItem value="3">Weighted Position (±n)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
       
@@ -197,6 +240,15 @@ const CompetitionControls: React.FC<CompetitionControlsProps> = ({
             </>
           )}
         </div>
+      </div>
+      
+      <div className="text-xs text-gray-500 mt-1">
+        <p><strong>Heuristic functions:</strong></p>
+        <ul className="list-disc list-inside pl-2 space-y-1">
+          <li><strong>Default:</strong> Based on disks on goal rod + distance penalties</li>
+          <li><strong>Correct Peg:</strong> +1 for disks on correct rod, -1 otherwise</li>
+          <li><strong>Weighted Position:</strong> +n for correctly placed disks where n = position, -n otherwise</li>
+        </ul>
       </div>
     </div>
   );

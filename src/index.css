@@ -91,7 +91,7 @@
     opacity: 0.9;
   }
   50% {
-    transform: translate(calc(var(--disk-start-x, 0px) + (var(--disk-end-x, 0px) - var(--disk-start-x, 0px)) * 0.5), -40px);
+    transform: translate(calc(var(--disk-start-x, 0px) + (var(--disk-end-x, 0px) - var(--disk-start-x, 0px)) * 0.5), -30px);
     opacity: 1;
   }
   100% {

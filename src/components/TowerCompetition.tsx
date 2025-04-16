@@ -6,13 +6,15 @@ import AlgorithmStats from './AlgorithmStats';
 import CompetitionControls from './CompetitionControls';
 import AlgorithmExplanation from './AlgorithmExplanation';
 import { Card, CardContent } from '@/components/ui/card';
-import { TowerOfHanoiAI } from '@/lib/towerOfHanoiAI';
+import { TowerOfHanoiAI, HeuristicType } from '@/lib/towerOfHanoiAI';
 
 const TowerCompetition: React.FC = () => {
   // Settings
   const [numDisks, setNumDisks] = useState<number>(3);
   const [algo1, setAlgo1] = useState<string>('2'); // A* by default
   const [algo2, setAlgo2] = useState<string>('1'); // Best-First by default
+  const [heuristic1, setHeuristic1] = useState<HeuristicType>('1'); // Default heuristic
+  const [heuristic2, setHeuristic2] = useState<HeuristicType>('1'); // Default heuristic
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(5);
   
   // Competition state
@@ -38,13 +40,23 @@ const TowerCompetition: React.FC = () => {
   // Animation timer
   const animationTimer = useRef<number | null>(null);
   
-  // AI instance
-  const aiRef = useRef(new TowerOfHanoiAI(numDisks));
+  // AI instances
+  const ai1Ref = useRef(new TowerOfHanoiAI(numDisks, heuristic1));
+  const ai2Ref = useRef(new TowerOfHanoiAI(numDisks, heuristic2));
   
-  // Update AI when disk count changes
+  // Update AI when disk count or heuristics change
   useEffect(() => {
-    aiRef.current.setNumDisks(numDisks);
+    ai1Ref.current.setNumDisks(numDisks);
+    ai2Ref.current.setNumDisks(numDisks);
   }, [numDisks]);
+  
+  useEffect(() => {
+    ai1Ref.current.setHeuristicType(heuristic1);
+  }, [heuristic1]);
+  
+  useEffect(() => {
+    ai2Ref.current.setHeuristicType(heuristic2);
+  }, [heuristic2]);
   
   // Handle starting the competition
   const handleStartCompetition = () => {
@@ -54,8 +66,8 @@ const TowerCompetition: React.FC = () => {
     
     try {
       // Run algorithms and get results
-      const results1 = aiRef.current.runAlgorithm(algo1 as '1' | '2' | '3');
-      const results2 = aiRef.current.runAlgorithm(algo2 as '1' | '2' | '3');
+      const results1 = ai1Ref.current.runAlgorithm(algo1 as '1' | '2' | '3');
+      const results2 = ai2Ref.current.runAlgorithm(algo2 as '1' | '2' | '3');
       
       setAlgo1Results(results1);
       setAlgo2Results(results2);
@@ -66,15 +78,15 @@ const TowerCompetition: React.FC = () => {
       if (!results1.success && !results2.success) {
         toast.error("Both algorithms failed to solve the puzzle!");
       } else if (!results1.success) {
-        toast.error(`${aiRef.current.getAlgorithmName(algo1)} failed to solve the puzzle!`);
+        toast.error(`${ai1Ref.current.getAlgorithmName(algo1)} failed to solve the puzzle!`);
       } else if (!results2.success) {
-        toast.error(`${aiRef.current.getAlgorithmName(algo2)} failed to solve the puzzle!`);
+        toast.error(`${ai2Ref.current.getAlgorithmName(algo2)} failed to solve the puzzle!`);
       } else {
         const winner = determineWinner(results1, results2);
         if (winner === 'tie') {
           toast.success("It's a perfect tie!");
         } else {
-          toast.success(`${aiRef.current.getAlgorithmName(winner === 'algo1' ? algo1 : algo2)} wins!`);
+          toast.success(`${winner === 'algo1' ? ai1Ref.current.getAlgorithmName(algo1) : ai2Ref.current.getAlgorithmName(algo2)} wins!`);
         }
       }
     } catch (error) {
@@ -195,6 +207,10 @@ const TowerCompetition: React.FC = () => {
         algo2={algo2}
         onAlgo1Change={setAlgo1}
         onAlgo2Change={setAlgo2}
+        heuristic1={heuristic1}
+        heuristic2={heuristic2}
+        onHeuristic1Change={setHeuristic1}
+        onHeuristic2Change={setHeuristic2}
         isPlaying={isPlaying}
         onPlay={handlePlay}
         onPause={handlePause}
@@ -224,7 +240,7 @@ const TowerCompetition: React.FC = () => {
             {/* Algorithm 1 */}
             <div className="space-y-4">
               <AlgorithmStats
-                algorithmName={aiRef.current.getAlgorithmName(algo1)}
+                algorithmName={`${ai1Ref.current.getAlgorithmName(algo1)} + ${ai1Ref.current.getHeuristicName(heuristic1)}`}
                 moves={algo1Results?.success ? Math.min(currentMoveIndex, algo1Results.moves) : 0}
                 nodesExplored={algo1Results?.nodesExplored || 0}
                 maxMoves={maxMoves}
@@ -236,10 +252,10 @@ const TowerCompetition: React.FC = () => {
               <Card className="overflow-hidden p-6 flex justify-center">
                 {algo1Results && (
                   <TowerOfHanoi
-                    initialState={aiRef.current.initialState.rods}
+                    initialState={ai1Ref.current.initialState.rods}
                     moves={algo1Results.movePath}
                     currentMove={Math.min(currentMoveIndex, algo1Results.movePath.length)}
-                    algorithm={aiRef.current.getAlgorithmName(algo1)}
+                    algorithm={ai1Ref.current.getAlgorithmName(algo1)}
                     variant="algo1"
                     isWinner={currentWinner === 'algo1'}
                   />
@@ -250,7 +266,7 @@ const TowerCompetition: React.FC = () => {
             {/* Algorithm 2 */}
             <div className="space-y-4">
               <AlgorithmStats
-                algorithmName={aiRef.current.getAlgorithmName(algo2)}
+                algorithmName={`${ai2Ref.current.getAlgorithmName(algo2)} + ${ai2Ref.current.getHeuristicName(heuristic2)}`}
                 moves={algo2Results?.success ? Math.min(currentMoveIndex, algo2Results.moves) : 0}
                 nodesExplored={algo2Results?.nodesExplored || 0}
                 maxMoves={maxMoves}
@@ -262,10 +278,10 @@ const TowerCompetition: React.FC = () => {
               <Card className="overflow-hidden p-6 flex justify-center">
                 {algo2Results && (
                   <TowerOfHanoi
-                    initialState={aiRef.current.initialState.rods}
+                    initialState={ai2Ref.current.initialState.rods}
                     moves={algo2Results.movePath}
                     currentMove={Math.min(currentMoveIndex, algo2Results.movePath.length)}
-                    algorithm={aiRef.current.getAlgorithmName(algo2)}
+                    algorithm={ai2Ref.current.getAlgorithmName(algo2)}
                     variant="algo2"
                     isWinner={currentWinner === 'algo2'}
                   />
