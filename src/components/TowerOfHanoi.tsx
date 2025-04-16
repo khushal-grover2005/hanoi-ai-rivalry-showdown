@@ -35,35 +35,9 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
     { disks: [...initialState[2]] }
   ]);
 
-  const [lastMovedDisk, setLastMovedDisk] = useState<number | null>(null);
   const [movingFrom, setMovingFrom] = useState<number | null>(null);
   const [movingTo, setMovingTo] = useState<number | null>(null);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const [rodPositions, setRodPositions] = useState<{[key: number]: {x: number}}>({}); 
   const rodsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Calculate rod positions on mount and resize
-  useEffect(() => {
-    const calculateRodPositions = () => {
-      const positions: {[key: number]: {x: number}} = {};
-      
-      rodsRef.current.forEach((rodRef, index) => {
-        if (rodRef) {
-          const rect = rodRef.getBoundingClientRect();
-          positions[index] = { x: rect.x + rect.width / 2 };
-        }
-      });
-      
-      setRodPositions(positions);
-    };
-
-    calculateRodPositions();
-    window.addEventListener('resize', calculateRodPositions);
-    
-    return () => {
-      window.removeEventListener('resize', calculateRodPositions);
-    };
-  }, []);
 
   useEffect(() => {
     // Reset to initial state
@@ -73,10 +47,8 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
         { disks: [...initialState[1]] },
         { disks: [...initialState[2]] }
       ]);
-      setLastMovedDisk(null);
       setMovingFrom(null);
       setMovingTo(null);
-      setIsAnimating(false);
       return;
     }
 
@@ -99,18 +71,14 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
     // Set highlighting for animation
     setMovingFrom(fromRod);
     setMovingTo(toRod);
-    setLastMovedDisk(diskToMove);
-    setIsAnimating(true);
     
     setRods(newRods);
     
-    // Clear highlighting after animation
+    // Clear highlighting after a short delay
     const timer = setTimeout(() => {
       setMovingFrom(null);
       setMovingTo(null);
-      setLastMovedDisk(null);
-      setIsAnimating(false);
-    }, 800); // Match animation duration
+    }, 800);
     
     return () => clearTimeout(timer);
   }, [currentMove, initialState, moves]);
@@ -118,25 +86,6 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
   const maxDiskWidth = 100; // Width of the largest disk in pixels
   const diskHeight = 20; // Height of each disk in pixels
   const maxDisks = Math.max(...initialState.map(rod => rod.length), 8); // Ensuring we can handle at least 8 disks
-
-  // Calculate disk movement CSS variables
-  const getDiskStyle = (rodIndex: number, diskSize: number) => {
-    if (diskSize === lastMovedDisk && rodIndex === movingTo && isAnimating) {
-      // Get the relative positions from source to destination
-      const fromPosition = rodPositions[movingFrom as number]?.x || 0;
-      const toPosition = rodPositions[movingTo as number]?.x || 0;
-      
-      // Calculate the difference relative to the viewport
-      const startX = 0; // Starting point (the disk's own position is the reference)
-      const endX = toPosition - fromPosition; // End point
-      
-      return {
-        '--disk-start-x': `${startX}px`,
-        '--disk-end-x': `${endX}px`,
-      } as React.CSSProperties;
-    }
-    return {};
-  };
 
   return (
     <div className={cn(
@@ -158,7 +107,7 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
             key={rodIndex} 
             className={cn(
               "flex flex-col-reverse items-center relative",
-              (rodIndex === movingFrom || rodIndex === movingTo) && !isAnimating && "rod-pulse"
+              (rodIndex === movingFrom || rodIndex === movingTo) && "rod-pulse"
             )}
             ref={el => rodsRef.current[rodIndex] = el}
           >
@@ -171,7 +120,6 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
             {/* Disks */}
             <div className="flex flex-col-reverse items-center z-10">
               {rod.disks.map((diskSize, diskIndex) => {
-                const isMovingDisk = diskSize === lastMovedDisk && rodIndex === movingTo;
                 const widthPercent = (diskSize / maxDisks) * 100;
                 const width = (widthPercent / 100) * maxDiskWidth;
                 
@@ -200,15 +148,13 @@ const TowerOfHanoi: React.FC<TowerOfHanoiProps> = ({
                     key={diskIndex}
                     className={cn(
                       "rounded-md flex justify-center items-center transition-all duration-200",
-                      isMovingDisk && "disk-moving",
                       borderStyle
                     )}
                     style={{
                       width: `${width}px`,
                       height: `${diskHeight}px`,
                       backgroundColor: backgroundColor,
-                      transition: 'width 0.3s ease-in-out',
-                      ...getDiskStyle(rodIndex, diskSize)
+                      transition: 'width 0.3s ease-in-out'
                     }}
                   >
                     <span className={cn("text-xs font-bold", textColor)}>
