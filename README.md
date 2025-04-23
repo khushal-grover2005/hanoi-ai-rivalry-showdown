@@ -1,58 +1,37 @@
-# Tower of hanoi: AI vs AI showdown
 
-## Project info
+# Tower of Hanoi: AI vs AI Showdown
 
-**URL**: https://lovable.dev/projects/167c6a22-4470-44a2-96f7-94a5a6eec1dc
+## Project Overview
 
-## How can I edit this code?
+A fascinating AI-driven exploration of the classic Tower of Hanoi puzzle, where different AI algorithms compete to solve the challenge with the most efficient strategies.
 
-There are several ways of editing your application.
+## Getting Started
 
-**Use Lovable**
+### Prerequisites
+- Node.js (v18 or later)
+- npm
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/167c6a22-4470-44a2-96f7-94a5a6eec1dc) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone [YOUR_REPOSITORY_URL]
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd tower-of-hanoi-ai-rivalry
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## About the Project
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+This project demonstrates various AI algorithms solving the Tower of Hanoi puzzle, showcasing different problem-solving approaches and computational strategies.
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
+## Technologies Used
 
 - Vite
 - TypeScript
@@ -60,14 +39,32 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## Features
 
-Simply open [Lovable](https://lovable.dev/projects/167c6a22-4470-44a2-96f7-94a5a6eec1dc) and click on Share -> Publish.
+- Multiple AI algorithm implementations
+- Real-time visualization of puzzle solving
+- Performance and strategy comparison
+- Interactive algorithm selection
 
-## Can I connect a custom domain to my Lovable project?
+## Deployment
 
-Yes it is!
+### Local Development
+Run `npm run dev` to start the local development server.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Building for Production
+Run `npm run build` to create a production-ready build.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[Specify your license here, e.g., MIT]
+
+## Acknowledgments
+
+- Tower of Hanoi puzzle concept
+- AI algorithm research and implementation
+
+```
