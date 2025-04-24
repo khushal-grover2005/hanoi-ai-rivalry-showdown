@@ -58,10 +58,6 @@ Run `npm run build` to create a production-ready build.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
-
-[Specify your license here, e.g., MIT]
-
 ## Acknowledgments
 
 - Tower of Hanoi puzzle concept
