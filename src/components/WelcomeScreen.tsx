@@ -10,27 +10,24 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   const [visible, setVisible] = useState(true);
   
   useEffect(() => {
-    // Show for 5 seconds, then start fade out (increased from 4 to 5 seconds)
     const timer = setTimeout(() => {
       setVisible(false);
-      
-      // Complete animation after fade out (1s)
       setTimeout(onComplete, 1000);
     }, 5000);
-    
+
     return () => clearTimeout(timer);
   }, [onComplete]);
-  
+
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600/95 to-purple-800/95 text-white"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center text-white bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e]"
       initial={{ opacity: 0 }}
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 1 }}
     >
-      {/* Tower of Hanoi stylized icon */}
+      {/* Tower Icon */}
       <div className="mb-8">
-        <svg width="140" height="140" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
+        <svg width="140" height="140" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xl">
           <rect width="64" height="64" fill="#1a1a2e" rx="4" />
           <rect x="28" y="12" width="8" height="36" fill="#e2e8f0" />
           <ellipse cx="32" cy="54" rx="22" ry="4" fill="#e2e8f0" opacity="0.8" />
@@ -40,30 +37,32 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
           <rect x="28" y="24" width="8" height="4" rx="2" fill="#c4b5fd" />
         </svg>
       </div>
-      
-      <h1 className="text-5xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200">Tower of Hanoi</h1>
-      <h2 className="text-3xl font-semibold mb-4 text-indigo-200">AI vs AI Tutorial</h2>
-      
-      {/* Authors moved below heading */}
+
+      {/* Title */}
+      <h1 className="text-5xl font-extrabold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-300">Tower of Hanoi</h1>
+      <h2 className="text-3xl font-semibold text-indigo-200 mb-4">AI vs AI Tutorial</h2>
+
+      {/* Authors */}
       <div className="mt-6 mb-12 text-center">
-        <h3 className="text-xl font-medium mb-3 text-indigo-200">Authors</h3>
-        <p className="text-base mb-1 text-white/90">Khushal Grover</p>
-        <p className="text-base mb-1 text-white/90">Prabhkanwal Singh</p>
+        <h3 className="text-xl font-medium mb-3 text-indigo-300">Authors</h3>
+        <p className="text-base text-white/90">Khushal Grover</p>
+        <p className="text-base text-white/90">Prabhkanwal Singh</p>
         <p className="text-base text-white/90">Gurnoor Singh Pannu</p>
       </div>
-      
-      {/* Add subtle particle or shimmer effect */}
+
+      {/* Particle Effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
-          <div 
+          <div
             key={i}
-            className="absolute rounded-full bg-white/10"
+            className="absolute rounded-full bg-white/10 blur-sm"
             style={{
-              width: Math.random() * 8 + 2 + 'px',
-              height: Math.random() * 8 + 2 + 'px',
+              width: Math.random() * 6 + 3 + 'px',
+              height: Math.random() * 6 + 3 + 'px',
               top: Math.random() * 100 + '%',
               left: Math.random() * 100 + '%',
-              animation: `twinkle ${Math.random() * 3 + 2}s infinite`
+              animation: `twinkle ${Math.random() * 3 + 2}s infinite ease-in-out`,
+              animationDelay: `${Math.random() * 3}s`
             }}
           />
         ))}
