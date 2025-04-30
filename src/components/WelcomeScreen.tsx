@@ -44,7 +44,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
 
       {/* Authors */}
       <div className="mt-6 mb-12 text-center">
-        <h3 className="text-xl font-medium mb-3 text-indigo-300">Authors</h3>
+        <h3 className="text-xl font-medium mb-3 text-indigo-300">Creators</h3>
         <p className="text-base text-white/90">Khushal Grover</p>
         <p className="text-base text-white/90">Prabhkanwal Singh</p>
         <p className="text-base text-white/90">Gurnoor Singh Pannu</p>
