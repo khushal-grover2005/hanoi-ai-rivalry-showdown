@@ -20,7 +20,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center text-white bg-gradient-to-br from-[#0f0c29]/90 via-[#302b63]/85 to-[#24243e]/90"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center text-white bg-gradient-to-br from-[#0f0c29]/95 via-[#302b63]/90 to-[#24243e]/95"
       initial={{ opacity: 0 }}
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 1 }}
