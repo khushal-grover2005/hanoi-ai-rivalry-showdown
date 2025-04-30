@@ -1,0 +1,57 @@
+
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+
+interface WelcomeScreenProps {
+  onComplete: () => void;
+}
+
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
+  const [visible, setVisible] = useState(true);
+  
+  useEffect(() => {
+    // Show for 4 seconds, then start fade out
+    const timer = setTimeout(() => {
+      setVisible(false);
+      
+      // Complete animation after fade out (1s)
+      setTimeout(onComplete, 1000);
+    }, 4000);
+    
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+  
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-500/90 to-purple-700/90 text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: 1 }}
+    >
+      {/* Tower of Hanoi stylized icon */}
+      <div className="mb-8">
+        <svg width="120" height="120" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" fill="#1a1a2e" rx="4" />
+          <rect x="28" y="12" width="8" height="36" fill="#e2e8f0" />
+          <ellipse cx="32" cy="54" rx="22" ry="4" fill="#e2e8f0" opacity="0.8" />
+          <rect x="18" y="42" width="28" height="6" rx="3" fill="#60a5fa" />
+          <rect x="22" y="36" width="20" height="5" rx="2.5" fill="#818cf8" />
+          <rect x="25" y="30" width="14" height="5" rx="2.5" fill="#a78bfa" />
+          <rect x="28" y="24" width="8" height="4" rx="2" fill="#c4b5fd" />
+        </svg>
+      </div>
+      
+      <h1 className="text-4xl font-bold mb-6">Tower of Hanoi</h1>
+      <h2 className="text-2xl font-semibold mb-12">AI Rivalry Tutorial</h2>
+      
+      <div className="absolute bottom-5 right-8 text-right">
+        <h3 className="text-xl font-medium mb-2">Authors</h3>
+        <p className="text-sm mb-1">Khushal Grover</p>
+        <p className="text-sm mb-1">Prabhkanwal Singh</p>
+        <p className="text-sm">Gurnoor Singh Pannu</p>
+      </div>
+    </motion.div>
+  );
+};
+
+export default WelcomeScreen;
