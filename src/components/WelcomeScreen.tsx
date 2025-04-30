@@ -10,27 +10,27 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   const [visible, setVisible] = useState(true);
   
   useEffect(() => {
-    // Show for 4 seconds, then start fade out
+    // Show for 5 seconds, then start fade out (increased from 4 to 5 seconds)
     const timer = setTimeout(() => {
       setVisible(false);
       
       // Complete animation after fade out (1s)
       setTimeout(onComplete, 1000);
-    }, 4000);
+    }, 5000);
     
     return () => clearTimeout(timer);
   }, [onComplete]);
   
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-500/90 to-purple-700/90 text-white"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600/95 to-purple-800/95 text-white"
       initial={{ opacity: 0 }}
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 1 }}
     >
       {/* Tower of Hanoi stylized icon */}
       <div className="mb-8">
-        <svg width="120" height="120" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <svg width="140" height="140" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
           <rect width="64" height="64" fill="#1a1a2e" rx="4" />
           <rect x="28" y="12" width="8" height="36" fill="#e2e8f0" />
           <ellipse cx="32" cy="54" rx="22" ry="4" fill="#e2e8f0" opacity="0.8" />
@@ -41,14 +41,32 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
         </svg>
       </div>
       
-      <h1 className="text-4xl font-bold mb-6">Tower of Hanoi</h1>
-      <h2 className="text-2xl font-semibold mb-12">AI Rivalry Tutorial</h2>
+      <h1 className="text-5xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200">Tower of Hanoi</h1>
+      <h2 className="text-3xl font-semibold mb-4 text-indigo-200">AI vs AI Tutorial</h2>
       
-      <div className="absolute bottom-5 right-8 text-right">
-        <h3 className="text-xl font-medium mb-2">Authors</h3>
-        <p className="text-sm mb-1">Khushal Grover</p>
-        <p className="text-sm mb-1">Prabhkanwal Singh</p>
-        <p className="text-sm">Gurnoor Singh Pannu</p>
+      {/* Authors moved below heading */}
+      <div className="mt-6 mb-12 text-center">
+        <h3 className="text-xl font-medium mb-3 text-indigo-200">Authors</h3>
+        <p className="text-base mb-1 text-white/90">Khushal Grover</p>
+        <p className="text-base mb-1 text-white/90">Prabhkanwal Singh</p>
+        <p className="text-base text-white/90">Gurnoor Singh Pannu</p>
+      </div>
+      
+      {/* Add subtle particle or shimmer effect */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div 
+            key={i}
+            className="absolute rounded-full bg-white/10"
+            style={{
+              width: Math.random() * 8 + 2 + 'px',
+              height: Math.random() * 8 + 2 + 'px',
+              top: Math.random() * 100 + '%',
+              left: Math.random() * 100 + '%',
+              animation: `twinkle ${Math.random() * 3 + 2}s infinite`
+            }}
+          />
+        ))}
       </div>
     </motion.div>
   );
